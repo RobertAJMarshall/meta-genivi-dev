@@ -1,0 +1,111 @@
+Index: new/PluginControlInterfacePulse/CMakeLists.txt
+===================================================================
+--- orig/PluginControlInterfacePulse/CMakeLists.txt	2016-09-09 16:06:35.868063668 +0100
++++ new/PluginControlInterfacePulse/CMakeLists.txt	2016-09-08 11:30:53.000000000 +0100
+@@ -23,7 +23,7 @@
+ PROJECT(PluginControlInterfacePulse)
+ 
+ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic")
+-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
++set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11")
+ 
+ FIND_PACKAGE(PkgConfig)
+ 
+@@ -49,7 +49,7 @@
+ STRING(REGEX REPLACE "[^0-9]" "" LIB_INTERFACE_VERSION ${LIB_INTERFACE_VERSION_STRING})
+ MESSAGE(STATUS "Building against control interface version ${LIB_INTERFACE_VERSION}")
+ 
+-FIND_PACKAGE(NSM REQUIRED)
++# FIND_PACKAGE(NSM REQUIRED)
+ 
+ INCLUDE_DIRECTORIES(
+ 	${CMAKE_SOURCE_DIR}
+Index: new/PluginControlInterfacePulse/include/ControlSender.h
+===================================================================
+--- orig/PluginControlInterfacePulse/include/ControlSender.h	2016-09-09 16:06:35.808063667 +0100
++++ new/PluginControlInterfacePulse/include/ControlSender.h	2016-09-07 12:48:10.000000000 +0100
+@@ -252,7 +252,7 @@
+     am_Error_e hookUserSetMainSourceNotificationConfiguration(
+         const am_sourceID_t sourceID,
+         const am_NotificationConfiguration_s& notificationConfiguration);
+-
++  /*
+     void hookSystemNodeStateChanged(const NsmNodeState_e NodeStateId);
+ 
+     void hookSystemNodeApplicationModeChanged(
+@@ -266,7 +266,7 @@
+     NsmErrorStatus_e hookSystemLifecycleRequest(
+         const uint32_t Request,
+         const uint32_t RequestId);
+-
++  */
+     void hookSystemSingleTimingInformationChanged(
+         const am_connectionID_t connectionID,
+         const am_timeSync_t time);
+Index: new/PluginControlInterfacePulse/src/ControlSender.cpp
+===================================================================
+--- orig/PluginControlInterfacePulse/src/ControlSender.cpp	2016-09-09 16:06:35.808063667 +0100
++++ new/PluginControlInterfacePulse/src/ControlSender.cpp	2016-09-07 12:49:05.000000000 +0100
+@@ -1755,7 +1755,7 @@
+     (void) notificationConfiguration;
+     return (E_NOT_USED);
+ }
+-
++/*
+ void ControlSenderPlugin::hookSystemNodeStateChanged(const NsmNodeState_e NodeStateId)
+ {
+     (void) NodeStateId;
+@@ -1781,7 +1781,7 @@
+     logInfo("CAmControlSenderBase::hookSystemLifecycleRequest request=",Request," requestID=",RequestId);
+     return (NsmErrorStatus_Error);
+ }
+-
++*/
+ void ControlSenderPlugin::hookSystemSingleTimingInformationChanged(const am_connectionID_t connectionID, const am_timeSync_t time)
+ {
+     (void) connectionID;
+ 
+     
+Index: new/PluginRoutingInterfacePulse/CMakeLists.txt
+===================================================================
+--- orig/PluginRoutingInterfacePulse/CMakeLists.txt	2016-09-09 16:06:36.268063675 +0100
++++ new/PluginRoutingInterfacePulse/CMakeLists.txt	2016-09-09 14:58:54.000000000 +0100
+@@ -24,7 +24,7 @@
+ PROJECT(PluginRoutingInterfacePULSE)
+ 
+ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic")
+-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
++set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11")
+ FILE(GLOB pulseConf "${CMAKE_CURRENT_SOURCE_DIR}/README*")
+ FIND_PACKAGE(PkgConfig)
+ 
+@@ -38,7 +38,7 @@
+ set(INCLUDES_FOLDER "include")
+ SET(LIB_INSTALL_SUFFIX "audiomanager")
+ 
+-FIND_PACKAGE(DBUS REQUIRED)
++# FIND_PACKAGE(DBUS REQUIRED)
+ FIND_PATH(AUDIO_INCLUDE_FOLDER audiomanagertypes.h /usr/include/audiomanager)
+ 
+ if(DEFINED AUDIO_INCLUDE_FOLDER)
+@@ -53,7 +53,7 @@
+ MESSAGE(STATUS "Building against routing interface version ${LIB_INTERFACE_VERSION}")
+ 
+ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
+-FIND_PACKAGE(DBUS REQUIRED)
++# FIND_PACKAGE(DBUS REQUIRED)
+ 
+ INCLUDE_DIRECTORIES(
+         ${CMAKE_SOURCE_DIR}
+Index: new/PluginRoutingInterfacePulse/include/RoutingSenderPULSE.h
+===================================================================
+--- orig/PluginRoutingInterfacePulse/include/RoutingSenderPULSE.h	2016-09-09 16:06:35.744063666 +0100
++++ new/PluginRoutingInterfacePulse/include/RoutingSenderPULSE.h	2016-09-07 12:46:00.000000000 +0100
+@@ -97,6 +97,7 @@
+     void getSourceInfoCallback(pa_context *c, const pa_source_info *i, int is_last, void *userdata);
+     void getSinkInputInfoCallback(pa_context *c, const pa_sink_input_info *i, void *userdata);
+     void getSourceOutputInfoCallback(pa_context *c, const pa_source_output_info *i, void *userdata);
++    am_Error_e resyncConnectionState(const am_domainID_t domainID, std::vector<am_Connection_s>& listOfExistingConnections);
+ 
+ private:
+     void loadConfig();
