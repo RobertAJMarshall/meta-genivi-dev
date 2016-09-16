@@ -16,7 +16,7 @@ Index: new/PluginControlInterfacePulse/CMakeLists.txt
  MESSAGE(STATUS "Building against control interface version ${LIB_INTERFACE_VERSION}")
  
 -FIND_PACKAGE(NSM REQUIRED)
-+# FIND_PACKAGE(NSM REQUIRED)
++pkg_check_modules (NSM "node-state-manager" REQUIRED)
  
  INCLUDE_DIRECTORIES(
  	${CMAKE_SOURCE_DIR}
@@ -84,7 +84,7 @@ Index: new/PluginRoutingInterfacePulse/CMakeLists.txt
  SET(LIB_INSTALL_SUFFIX "audiomanager")
  
 -FIND_PACKAGE(DBUS REQUIRED)
-+# FIND_PACKAGE(DBUS REQUIRED)
++pkg_check_modules (DBUS "dbus-1 >= 1.4" REQUIRED)
  FIND_PATH(AUDIO_INCLUDE_FOLDER audiomanagertypes.h /usr/include/audiomanager)
  
  if(DEFINED AUDIO_INCLUDE_FOLDER)
@@ -93,7 +93,7 @@ Index: new/PluginRoutingInterfacePulse/CMakeLists.txt
  
  SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 -FIND_PACKAGE(DBUS REQUIRED)
-+# FIND_PACKAGE(DBUS REQUIRED)
++pkg_check_modules (DBUS "dbus-1 >= 1.4" REQUIRED)
  
  INCLUDE_DIRECTORIES(
          ${CMAKE_SOURCE_DIR}
