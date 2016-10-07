@@ -1,5 +1,5 @@
 SRC_URI = "git://github.com/GENIVI/hmi-layout-gdp.git;branch=ics-launcher-gdp"
-SRCREV = "895c1d80be222b21831f7f87a7000562866c1e6c"
+SRCREV = "d0ca9d072012d8ac333537d9b922d9242e022efe"
 LICENSE  = "MPL-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=815ca599c9df247a0c7f619bab123dad"
 
@@ -15,6 +15,9 @@ SYSTEMD_AUTO_ENABLE = "enable"
 
 SRC_URI_append ="\
     file://gdp-new-hmi.service \
+    "
+SRC_URI_append_rcar-gen2 ="\
+    file://0001-Remove-cxx11-strings.patch \
     "
 
 FILES_${PN} += "\
